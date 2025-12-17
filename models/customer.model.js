@@ -1,39 +1,94 @@
 // models/customer.model.js
 import pool from "../db/db.js";
 
+/**
+ * Get all customers
+ */
 export async function getAllCustomers() {
-  const result = await pool.query("SELECT * FROM customer");
-  return result.rows;
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM customer ORDER BY customer_id DESC"
+    );
+    return rows;
+  } catch (error) {
+    throw new Error("Failed to fetch customers");
+  }
 }
 
+/**
+ * Get customer by ID
+ */
 export async function getCustomerById(id) {
-  const result = await pool.query(
-    "SELECT * FROM customer WHERE customer_id = $1",
-    [id]
-  );
-  return result.rows[0];
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM customer WHERE customer_id = $1",
+      [id]
+    );
+    return rows[0] || null;
+  } catch (error) {
+    throw new Error("Failed to fetch customer");
+  }
 }
 
+/**
+ * Create new customer
+ */
 export async function createCustomer(name, phone) {
-  const result = await pool.query(
-    "INSERT INTO customer (name, phone) VALUES ($1, $2) RETURNING *",
-    [name, phone]
-  );
-  return result.rows[0];
+  try {
+    const { rows } = await pool.query(
+      `INSERT INTO customer (name, phone)
+       VALUES ($1, $2)
+       RETURNING *`,
+      [name, phone]
+    );
+    return rows[0];
+  } catch (error) {
+    throw new Error("Failed to create customer");
+  }
 }
+
+/**
+ * Update customer by ID
+ */
 export async function updateCustomer(id, name, phone) {
-  const result = await pool.query(
-    "UPDATE customer SET name = $1, phone = $2 WHERE customer_id = $3 RETURNING *",
-    [name, phone, id]
-  );
-  return result.rows[0];
+  try {
+    const { rows } = await pool.query(
+      `UPDATE customer
+       SET name = $1,
+           phone = $2
+       WHERE customer_id = $3
+       RETURNING *`,
+      [name, phone, id]
+    );
+    return rows[0] || null;
+  } catch (error) {
+    throw new Error("Failed to update customer");
+  }
 }
 
+/**
+ * Delete customer by ID
+ */
 export async function deleteCustomer(id) {
-  await pool.query("DELETE FROM customer WHERE customer_id = $1", [id]);
+  try {
+    const result = await pool.query(
+      "DELETE FROM customer WHERE customer_id = $1",
+      [id]
+    );
+    return result.rowCount > 0;
+  } catch (error) {
+    throw new Error("Failed to delete customer");
+  }
 }
 
+/**
+ * Reset customer table (development only)
+ */
 export async function resetCustomerTable() {
-  await pool.query("DELETE FROM customer");
-  await pool.query("ALTER SEQUENCE customer_customer_id_seq RESTART WITH 1");
+  try {
+    await pool.query("TRUNCATE TABLE customer RESTART IDENTITY");
+    return true;
+  } catch (error) {
+    throw new Error("Failed to reset customer table");
+  }
 }
