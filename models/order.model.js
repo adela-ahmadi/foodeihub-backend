@@ -19,11 +19,18 @@ export async function createOrder(
   status,
   order_date
 ) {
-  const result = await pool.query(
-    "INSERT INTO food_order (customer_id, restaurant_id, status, order_date) VALUES ($1, $2, $3, $4) RETURNING *",
-    [customer_id, restaurant_id, status, order_date]
-  );
-  return result.rows[0];
+  try {
+    const { rows } = await pool.query(
+      `INSERT INTO food_order 
+       (customer_id, restaurant_id, status, order_date)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [customer_id, restaurant_id, status, order_date]
+    );
+    return rows[0];
+  } catch {
+    throw new Error("Failed to create order");
+  }
 }
 
 export async function deleteOrderById(id) {
