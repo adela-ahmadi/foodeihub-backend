@@ -36,7 +36,7 @@ backend/
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/adela2003/foodiehub-project.git
+   git clone https://github.com/adela-ahmadi/foodiehub-backend.git
    cd foodiehub-project/backend
    ```
 2. Create .env File
