@@ -94,7 +94,6 @@ See the Postman Collection for full details.
 
 📎 Author
 Adela Ahmadi
-Backend Student – 2025
 Herat, Afghanistan
 
 ```
