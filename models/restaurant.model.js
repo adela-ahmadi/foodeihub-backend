@@ -7,17 +7,14 @@ const RestaurantModel = {
   },
 
   getById: async (id) => {
-    const result = await db.query(
-      "SELECT * FROM restaurant WHERE restaurant_id = $1",
-      [id]
-    );
+    const result = await db.query("SELECT * FROM restaurant WHERE restaurant_id = $1", [id]);
     return result.rows[0];
   },
 
   create: async ({ name, address, phone }) => {
     const result = await db.query(
       "INSERT INTO restaurant (name, address, phone) VALUES ($1, $2, $3) RETURNING *",
-      [name, address, phone]
+      [name, address, phone],
     );
     return result.rows[0];
   },
@@ -25,7 +22,7 @@ const RestaurantModel = {
   update: async (id, { name, address, phone }) => {
     const result = await db.query(
       "UPDATE restaurant SET name = $1, address = $2, phone = $3 WHERE restaurant_id = $4 RETURNING *",
-      [name, address, phone, id]
+      [name, address, phone, id],
     );
     return result.rows[0];
   },

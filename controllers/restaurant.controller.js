@@ -13,8 +13,7 @@ const RestaurantController = {
   getById: async (req, res) => {
     try {
       const restaurant = await RestaurantModel.getById(req.params.id);
-      if (!restaurant)
-        return res.status(404).json({ error: "Restaurant not found" });
+      if (!restaurant) return res.status(404).json({ error: "Restaurant not found" });
       res.json(restaurant);
     } catch (err) {
       res.status(500).json({ error: "Error fetching restaurant" });

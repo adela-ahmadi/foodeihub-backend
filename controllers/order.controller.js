@@ -26,12 +26,7 @@ export async function addOrder(req, res) {
   if (!customer_id || !restaurant_id || !status || !order_date) {
     return res.status(400).json({ error: "All fields are required" });
   }
-  const order = await createOrder(
-    customer_id,
-    restaurant_id,
-    status,
-    order_date
-  );
+  const order = await createOrder(customer_id, restaurant_id, status, order_date);
   res.status(201).json(order);
 }
 
@@ -50,13 +45,7 @@ export async function updateOrder(req, res) {
   }
 
   try {
-    const updated = await updateOrderById(
-      id,
-      customer_id,
-      restaurant_id,
-      status,
-      order_date
-    );
+    const updated = await updateOrderById(id, customer_id, restaurant_id, status, order_date);
     res.json(updated);
   } catch (error) {
     res.status(500).json({ error: error.message });
